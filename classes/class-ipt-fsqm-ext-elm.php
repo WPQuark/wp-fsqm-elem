@@ -267,8 +267,35 @@ class IPT_FSQM_Ext_Elm {
 		$that->build_conditional( $name_prefix, $element_data['conditional'] );
 	}
 
+	/**
+	 * Frontend callback for populating form element
+	 * This is just an example
+	 * We could actually do far better
+	 *
+	 * @param      array   $element_definition    Definition of element
+	 * @param      int     $key                   Element key
+	 * @param      array   $element_data          Element settings data
+	 * @param      array   $element_structure     Element default structure
+	 * @param      string  $name_prefix           Prefix of HTML form element name attribute
+	 * @param      array   $submission_data       Submission data from user
+	 * @param      array   $submission_structure  Default submission structure
+	 * @param      object  $that                  Reference to the calling object
+	 */
 	public function ipicker_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
-
+		$items = array();
+		$items[] = array(
+			'label' => '<i class="ipt-icomoon" data-ipt-icomoon="&#x' . dechex( $element_data['settings']['icon1'] ) . '"></i> ' . $element_data['settings']['icon1_label'],
+			'value' => 'icon1',
+		);
+		$items[] = array(
+			'label' => '<i class="ipt-icomoon" data-ipt-icomoon="&#x' . dechex( $element_data['settings']['icon2'] ) . '"></i> ' . $element_data['settings']['icon2_label'],
+			'value' => 'icon2',
+		);
+		$param = array( $name_prefix . '[value]', $items, $submission_data['value'], $element_data['validation'], 2 );
+		$id = 'ipt_fsqm_form_' . $that->form_id . '_' . $element_structure['m_type'] . '_' . $key;
+		$that->ui->column_head( $id, 'full', true, 'ipt_fsqm_container_radio' );
+		$that->ui->question_container( $name_prefix, $element_data['title'], $element_data['subtitle'], array( array( $that->ui, 'radios' ), $param ), $element_data['validation']['required'], false, false, $element_data['description'] );
+		$that->ui->column_tail();
 	}
 
 	public function ipicker_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
@@ -310,6 +337,18 @@ class IPT_FSQM_Ext_Elm {
 
 	}
 
+	/**
+	 * Administrative callback for populating setting fields
+	 *
+	 * @param      array   $element_definition    Definition of element
+	 * @param      int     $key                   Element key
+	 * @param      array   $element_data          Element settings data
+	 * @param      array   $element_structure     Element default structure
+	 * @param      string  $name_prefix           Prefix of HTML form element name attribute
+	 * @param      array   $submission_data       Submission data from user
+	 * @param      array   $submission_structure  Default submission structure
+	 * @param      object  $that                  Reference to the calling object
+	 */
 	public function currency_cb_admin( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
 		// 'settings'   => array(
 		// 	'icon' => 0xf155, // To be used with fonticonpicker
@@ -371,8 +410,28 @@ class IPT_FSQM_Ext_Elm {
 		$that->build_conditional( $name_prefix, $element_data['conditional'] );
 	}
 
+	/**
+	 * Frontend callback for populating form element
+	 * This is just an example
+	 * We could actually do far better
+	 *
+	 * @param      array   $element_definition    Definition of element
+	 * @param      int     $key                   Element key
+	 * @param      array   $element_data          Element settings data
+	 * @param      array   $element_structure     Element default structure
+	 * @param      string  $name_prefix           Prefix of HTML form element name attribute
+	 * @param      array   $submission_data       Submission data from user
+	 * @param      array   $submission_structure  Default submission structure
+	 * @param      object  $that                  Reference to the calling object
+	 */
 	public function currency_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
-
+		$params = array(
+			$name_prefix . '[value]', $submission_data['value'], '', $element_data['settings']['min'], $element_data['settings']['max'], $element_data['settings']['step'], $element_data['validation']['required']
+		);
+		$id = 'ipt_fsqm_form_' . $that->form_id . '_' . $element_structure['m_type'] . '_' . $key;
+		$that->ui->column_head( $id, 'full', true, 'ipt_fsqm_container_radio' );
+		$that->ui->question_container( $name_prefix, '<i class="ipt-icomoon" data-ipt-icomoon="&#x' . dechex( $element_data['settings']['icon'] ) . '"></i> ' . $element_data['title'], $element_data['subtitle'], array( array( $that->ui, 'spinner' ), $params ), $element_data['validation']['required'], false, false, $element_data['description'] );
+		$that->ui->column_tail();
 	}
 
 	public function currency_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
