@@ -120,10 +120,10 @@ class IPT_FSQM_Ext_Elm {
 						'logic' => array(),
 					),
 					'settings' => array(
-						'icon1' => 0xe0d1,
+						'icon1' => 0xe0eb,
 						'icon1_label' => __( 'Heart filled with love', 'fsqm_elm' ),
-						'icon2' => 0xe0d3,
-						'icon_2_label' => __( 'Broken Heart', 'fsqm_elm' ),
+						'icon2' => 0xe0ed,
+						'icon2_label' => __( 'Broken Heart', 'fsqm_elm' ),
 					),
 				);
 				break;
@@ -166,7 +166,20 @@ class IPT_FSQM_Ext_Elm {
 
 
 	public function ipicker_cb( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
+		// Admin callback
+		if ( $that instanceof IPT_FSQM_Form_Elements_Admin ) {
+			$this->ipicker_cb_admin( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that );
 
+		// Frontend callback
+		} elseif ( $that instanceof IPT_FSQM_Form_Elements_Front ) {
+			$this->ipicker_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that );
+
+		// Data callback
+		} elseif ( $that instanceof IPT_FSQM_Form_Elements_Data ) {
+			$this->ipicker_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that );
+		} else {
+			echo 'Not known instance';
+		}
 	}
 
 	public function ipicker_report_cb( $do_data ) {
@@ -181,8 +194,77 @@ class IPT_FSQM_Ext_Elm {
 
 	}
 
+	/**
+	 * Administrative callback for populating setting fields
+	 *
+	 * @param      array   $element_definition    Definition of element
+	 * @param      int     $key                   Element key
+	 * @param      array   $element_data          Element settings data
+	 * @param      array   $element_structure     Element default structure
+	 * @param      string  $name_prefix           Prefix of HTML form element name attribute
+	 * @param      array   $submission_data       Submission data from user
+	 * @param      array   $submission_structure  Default submission structure
+	 * @param      object  $that                  Reference to the calling object
+	 */
 	public function ipicker_cb_admin( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
 
+		// 'settings' => array(
+		// 	'icon1' => 0xe0d1,
+		// 	'icon1_label' => __( 'Heart filled with love', 'fsqm_elm' ),
+		// 	'icon2' => 0xe0d3,
+		// 	'icon2_label' => __( 'Broken Heart', 'fsqm_elm' ),
+		// ),
+		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
+		?>
+	<table class="form-table">
+		<thead>
+			<tr>
+				<th colspan="3" style="text-align: center;"><h3><?php echo $element_definition['title']; ?></h3></th>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align: center;" ><span class="description"><?php echo $element_definition['description']; ?></span></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="3"><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
+			</tr>
+			<tr>
+				<td colspan="3"><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon1]', __( 'First Icon', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->icon_selector( $name_prefix . '[settings][icon1]', $element_data['settings']['icon1'], __( 'Do not use any icon', 'fsqm_elm' ) ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Select the icon', 'fsqm_elm' ) ); ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon1_label]', __( 'First Icon Label', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->text( $name_prefix . '[settings][icon1_label]', $element_data['settings']['icon1_label'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Enter the label for this icon.', 'fsqm_elm' ) ) ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon2]', __( 'Second Icon', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->icon_selector( $name_prefix . '[settings][icon2]', $element_data['settings']['icon2'], __( 'Do not use any icon', 'fsqm_elm' ) ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Select the icon', 'fsqm_elm' ) ); ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon2_label]', __( 'Second Icon Label', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->text( $name_prefix . '[settings][icon2_label]', $element_data['settings']['icon2_label'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Enter the label for this icon.', 'fsqm_elm' ) ) ?></td>
+			</tr>
+		</tbody>
+	</table>
+		<?php
+		$that->build_validation( $name_prefix, $element_structure['validation'], $element_data['validation'] );
+		$that->build_conditional( $name_prefix, $element_data['conditional'] );
 	}
 
 	public function ipicker_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
@@ -200,7 +282,20 @@ class IPT_FSQM_Ext_Elm {
 
 
 	public function currency_cb( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
+		// Admin callback
+		if ( $that instanceof IPT_FSQM_Form_Elements_Admin ) {
+			$this->currency_cb_admin( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that );
 
+		// Frontend callback
+		} elseif ( $that instanceof IPT_FSQM_Form_Elements_Front ) {
+			$this->currency_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that );
+
+		// Data callback
+		} elseif ( $that instanceof IPT_FSQM_Form_Elements_Data ) {
+			$this->currency_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that );
+		} else {
+			echo 'Not known instance';
+		}
 	}
 
 	public function currency_report_cb( $do_data ) {
@@ -216,7 +311,64 @@ class IPT_FSQM_Ext_Elm {
 	}
 
 	public function currency_cb_admin( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
-
+		// 'settings'   => array(
+		// 	'icon' => 0xf155, // To be used with fonticonpicker
+		// 	'max' => '',
+		// 	'min' => '',
+		// 	'step' => '',
+		// ),
+		//
+		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
+		?>
+	<table class="form-table">
+		<thead>
+			<tr>
+				<th colspan="3" style="text-align: center;"><h3><?php echo $element_definition['title']; ?></h3></th>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align: center;" ><span class="description"><?php echo $element_definition['description']; ?></span></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="3"><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
+			</tr>
+			<tr>
+				<td colspan="3"><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon]', __( 'Icon', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->icon_selector( $name_prefix . '[settings][icon]', $element_data['settings']['icon'], __( 'Do not use any icon', 'fsqm_elm' ) ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Select the icon', 'fsqm_elm' ) ); ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][min]', __( 'Minumum Input', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->spinner( $name_prefix . '[settings][min]', $element_data['settings']['min'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Enter minimum input.', 'fsqm_elm' ) ) ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][max]', __( 'Maximum Input', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->spinner( $name_prefix . '[settings][max]', $element_data['settings']['max'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Enter Maximum input.', 'fsqm_elm' ) ) ?></td>
+			</tr>
+			<tr>
+				<th><?php $that->ui->generate_label( $name_prefix . '[settings][step]', __( 'Input Step', 'fsqm_elm' ) ); ?></th>
+				<td>
+					<?php $that->ui->spinner( $name_prefix . '[settings][step]', $element_data['settings']['step'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+				</td>
+				<td><?php $that->ui->help( __( 'Enter input step.', 'fsqm_elm' ) ) ?></td>
+			</tr>
+		</tbody>
+	</table>
+		<?php
+		$that->build_validation( $name_prefix, $element_structure['validation'], $element_data['validation'] );
+		$that->build_conditional( $name_prefix, $element_data['conditional'] );
 	}
 
 	public function currency_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
