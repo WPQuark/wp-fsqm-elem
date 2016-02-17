@@ -329,7 +329,41 @@ class IPT_FSQM_Ext_Elm {
 	}
 
 	public function ipicker_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
-
+		$checked = '<img src="' . $that->icon_path . 'radio-checked.png" height="16" width="16" />';
+		$unchecked = '<img src="' . $that->icon_path . 'radio-unchecked.png" height="16" width="16" />';
+		$ui = new IPT_Plugin_UIF_Front( 'ipt_fsqm' );
+		?>
+		<th style="<?php echo $that->email_styling['th']; ?>" colspan="2" rowspan="2" scope="row">
+			<?php echo $element_data['title']; ?><br /><span class="description" style="<?php echo $that->email_styling['description']; ?>"><?php echo $element_data['subtitle']; ?></span>
+			<?php if ( $element_data['description'] !== '' ) : ?>
+			<div class="ipt_uif_richtext">
+				<?php echo apply_filters( 'ipt_uif_richtext', $element_data['description'] ); ?>
+			</div>
+			<?php endif; ?>
+		</th>
+		<td style="<?php echo $that->email_styling['icons']; ?>" class="icons">
+		<?php if ( $submission_data['value'] == 'icon1' ) {
+			echo $checked;
+		} else {
+			echo $unchecked;
+		} ?>
+		</td>
+		<td style="<?php echo $that->email_styling['td']; ?>" colspan="2">
+			<?php echo '<img src="' . $that->icon_path . $ui->get_icon_image_name( $element_data['settings']['icon1'] ) . '" height="16" width="16" /> ' . $element_data['settings']['icon1_label']; ?>
+		</td>
+	</tr>
+	<tr>
+		<td style="<?php echo $that->email_styling['icons']; ?>" class="icons">
+		<?php if ( $submission_data['value'] == 'icon2' ) {
+			echo $checked;
+		} else {
+			echo $unchecked;
+		} ?>
+		</td>
+		<td style="<?php echo $that->email_styling['td']; ?>" colspan="2">
+			<?php echo '<img src="' . $that->icon_path . $ui->get_icon_image_name( $element_data['settings']['icon2'] ) . '" height="16" width="16" /> ' . $element_data['settings']['icon2_label']; ?>
+		</td>
+		<?php
 	}
 
 
@@ -493,6 +527,23 @@ class IPT_FSQM_Ext_Elm {
 	}
 
 	public function currency_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
-
+		$ui = new IPT_Plugin_UIF_Front( 'ipt_fsqm' );
+		$img = '<img src="' . $that->icon_path . $ui->get_icon_image_name( $element_data['settings']['icon'] ) . '" height="16" width="16" /> ';
+		?>
+		<th style="<?php echo $that->email_styling['th']; ?>" colspan="2" scope="row">
+			<?php echo $element_data['title']; ?><br /><span class="description" style="<?php echo $that->email_styling['description']; ?>"><?php echo $element_data['subtitle']; ?></span>
+			<?php if ( $element_data['description'] !== '' ) : ?>
+			<div class="ipt_uif_richtext">
+				<?php echo apply_filters( 'ipt_uif_richtext', $element_data['description'] ); ?>
+			</div>
+			<?php endif; ?>
+		</th>
+		<td style="<?php echo $that->email_styling['icons']; ?>" class="icons">
+			<?php echo $img; ?>
+		</td>
+		<td style="<?php echo $that->email_styling['td']; ?>" colspan="2">
+			<?php echo '<code>' . $submission_data['value'] . '</code>'; ?>
+		</td>
+		<?php
 	}
 }
