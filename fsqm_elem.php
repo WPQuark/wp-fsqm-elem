@@ -28,3 +28,7 @@ Domain Path: /translations
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+require_once dirname( __FILE__ ) . '/classes/class-ipt-fsqm-ext-elm.php';
+
+$ipt_fsqm_ext_elm = new IPT_FSQM_Ext_Elm( __FILE__, dirname( __FILE__ ), '1.0.0' );
