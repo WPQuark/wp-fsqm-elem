@@ -145,10 +145,12 @@ class IPT_FSQM_Ext_Elm {
 		switch ( $element ) {
 			case 'currency' :
 				$default['m_type'] = 'freetype';
+				$default['type'] = $element;
 				$default['value'] = '';
 				break;
 			case 'ipicker' :
 				$default['m_type'] = 'mcq';
+				$default['type'] = $element;
 				$default['value'] = '';
 				break;
 			default :
@@ -190,8 +192,36 @@ class IPT_FSQM_Ext_Elm {
 
 	}
 
+	/**
+	 * Validation callback for server side processing
+	 *
+	 * @param      array   $element  Element Settings
+	 * @param      array   $data     Submission data
+	 * @param      int     $key      Element key
+	 *
+	 * @return     array
+	 */
 	public function ipicker_validation( $element, $data, $key ) {
+		// Prepare the return
+		$validation_result = array(
+			'data_tampering'      => false,
+			'required_validation' => true,
+			'errors'              => array(),
+			'conditional_hidden'  => false,
+			'data'                => $data,
+		);
 
+		// Check for data tampering
+		if ( $element['type'] !== $data['type'] || $element['m_type'] !== $data['m_type'] ) {
+			$validation_result['data_tampering'] = true;
+		}
+
+		// Check for required validation
+		if ( empty( $data['value'] ) && $element['validation']['required'] == true ) {
+			$validation_result['required_validation'] = false;
+		}
+
+		return $validation_result;
 	}
 
 	/**
@@ -333,8 +363,36 @@ class IPT_FSQM_Ext_Elm {
 
 	}
 
+	/**
+	 * Validation callback for server side processing
+	 *
+	 * @param      array   $element  Element Settings
+	 * @param      array   $data     Submission data
+	 * @param      int     $key      Element key
+	 *
+	 * @return     array
+	 */
 	public function currency_validation( $element, $data, $key ) {
+		// Prepare the return
+		$validation_result = array(
+			'data_tampering'      => false,
+			'required_validation' => true,
+			'errors'              => array(),
+			'conditional_hidden'  => false,
+			'data'                => $data,
+		);
 
+		// Check for data tampering
+		if ( $element['type'] !== $data['type'] || $element['m_type'] !== $data['m_type'] ) {
+			$validation_result['data_tampering'] = true;
+		}
+
+		// Check for required validation
+		if ( empty( $data['value'] ) && $element['validation']['required'] == true ) {
+			$validation_result['required_validation'] = false;
+		}
+
+		return $validation_result;
 	}
 
 	/**
