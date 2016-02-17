@@ -24,12 +24,31 @@ class IPT_FSQM_Ext_Elm {
 
 		// Base submission filter
 		add_filter( 'ipt_fsqm_filter_form_data_structure', array( $this, 'element_base_data_structure' ), 10, 3 );
+
+		// Report related filter and action
+		add_filter( 'ipt_fsqm_report_js', array( $this, 'report_obj_filter' ) );
+		add_action( 'ipt_fsqm_report_enqueue', array( $this, 'report_enqueue' ) );
 	}
 
 	/*==========================================================================
 	 * System required callbacks
 	 * and filter/hook callbacks
 	 *========================================================================*/
+
+	public function report_obj_filter( $obj ) {
+		$obj['gcallbacks']['ipicker'] = 'fsqm_elm_report_ipicker_gcb';
+		$obj['callbacks']['ipicker'] = 'fsqm_elm_report_ipicker_cb';
+		$obj['callbacks']['currency'] = 'fsqm_elm_report_currency_cb';
+		return $obj;
+	}
+
+	public function report_enqueue() {
+		wp_enqueue_script( 'fsqm-elem-js', plugins_url( '/js/fsqm-elem-report.js', self::$absfile ), array('jquery'), self::$version );
+		wp_localize_script( 'fsqm-elem-js', 'fsqmElemJS', array(
+			'olabel' => __( 'Options', 'fsqm_elm' ),
+			'clabel' => __( 'Count', 'fsqm_elm' ),
+		) );
+	}
 
 
 	public function element_base_valid( $elements, $form_id ) {
@@ -184,12 +203,92 @@ class IPT_FSQM_Ext_Elm {
 		}
 	}
 
-	public function ipicker_report_cb( $do_data ) {
-
+	/**
+	 * Callback for report generation table
+	 *
+	 * @param      bool    $do_data       True if sensitive data can be printed
+	 * @param      array   $element_data  Associative array of element settings
+	 */
+	public function ipicker_report_cb( $do_data, $element_data ) {
+		$iconpath = plugins_url( '/lib/images/icomoon/333/PNG/', IPT_FSQM_Loader::$abs_file );
+		$ui = new IPT_Plugin_UIF_Front( 'ipt_fsqm' );
+		$data = array(
+			'icon1' => 0,
+			'icon2' => 0,
+		);
+		?>
+<table class="ipt_fsqm_preview table_to_update">
+	<thead>
+		<tr>
+			<th style="width: 50%"><?php _e( 'Graphical Representation', 'ipt_cs' ); ?></th>
+			<th style="width: 50%"><?php _e( 'Data', 'ipt_cs' ); ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 50%" class="visualization"><!-- Pie --></td>
+			<td style="width: 50%" class="data">
+				<table class="ipt_fsqm_preview">
+					<thead>
+						<tr>
+							<th style="width: 80%" colspan="2"><?php _e( 'Option', 'ipt_cs' ); ?></th>
+							<th style="width: 20%"><?php _e( 'Count', 'ipt_cs' ); ?></th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th style="width: 80%" colspan="2"><?php _e( 'Option', 'ipt_cs' ); ?></th>
+							<th style="width: 20%"><?php _e( 'Count', 'ipt_cs' ); ?></th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<tr>
+							<td><?php echo '<img src="' . $iconpath . $ui->get_icon_image_name( $element_data['settings']['icon1'] ) . '" height="16" width="16" /> '; ?></td>
+							<th><?php echo $element_data['settings']['icon1_label']; ?></th>
+							<td class="icon1">0</td>
+						</tr>
+						<tr>
+							<td><?php echo '<img src="' . $iconpath . $ui->get_icon_image_name( $element_data['settings']['icon2'] ) . '" height="16" width="16" /> '; ?></td>
+							<th><?php echo $element_data['settings']['icon2_label']; ?></th>
+							<td class="icon2">0</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+		<?php
+		return $data;
 	}
 
-	public function ipicker_report_cal_cb( $element, $data, $m_key, $do_data, $return ) {
+	/**
+	 * Report calculator for ipicker
+	 *
+	 * @param      array   $element  Element Settings
+	 * @param      array   $data     Submission data
+	 * @param      int     $m_key    Element key
+	 * @param      bool    $do_data  True if sensitive data can be printed
+	 * @param      array   $return   Return data
+	 * @param      obj     $obj      Reference to IPT_FSQM_Form_Elements_Data object
+	 *
+	 * @return     array
+	 */
+	public function ipicker_report_cal_cb( $element, $data, $m_key, $do_data, $return, $obj ) {
+		if ( ! is_array( $return ) || empty( $return ) ) {
+			$return = array(
+				'icon1' => 0,
+				'icon2' => 0,
+			);
+		}
 
+		if ( $data['value'] == 'icon1' ) {
+			$return['icon1']++;
+		} elseif ( $data['value'] == 'icon2' ) {
+			$return['icon2']++;
+		}
+
+		return $return;
 	}
 
 	/**
@@ -389,12 +488,71 @@ class IPT_FSQM_Ext_Elm {
 		}
 	}
 
-	public function currency_report_cb( $do_data ) {
+	public function currency_report_cb( $element_data ) {
+		$pinfo_titles = array(
+			'name' => __( 'Name', 'fsqm_elm' ),
+			'email' => __( 'Email', 'fsqm_elm' ),
+			'phone' => __( 'Phone', 'fsqm_elm' ),
+		);
 
+		$data = array();
+
+		?>
+<table class="ipt_fsqm_preview">
+	<thead>
+		<tr>
+			<th style="width: 40%;"><?php _e( 'Feedback', 'fsqm_elm' ); ?></th>
+			<?php foreach ( $pinfo_titles as $p_val ) : ?>
+			<th><?php echo $p_val; ?></th>
+			<?php endforeach; ?>
+			<th><?php _e( 'Date', 'fsqm_elm' ); ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="empty">
+			<td colspan="5"><?php _e( 'No data yet!', 'fsqm_elm' ); ?></td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th style="width: 40%;"><?php _e( 'Feedback', 'fsqm_elm' ); ?></th>
+			<?php foreach ( $pinfo_titles as $p_val ) : ?>
+			<th><?php echo $p_val; ?></th>
+			<?php endforeach; ?>
+			<th><?php _e( 'Date', 'fsqm_elm' ); ?></th>
+		</tr>
+	</tfoot>
+</table>
+		<?php
+		return $data;
 	}
 
-	public function currency_report_cal_cb( $element, $data, $m_key, $do_data, $return ) {
+	/**
+	 * Report calculator for ipicker
+	 *
+	 * @param      array   $element  Element Settings
+	 * @param      array   $data     Submission data
+	 * @param      int     $m_key    Element key
+	 * @param      bool    $do_data  True if sensitive data can be printed
+	 * @param      array   $return   Return data
+	 * @param      obj     $obj      Reference to IPT_FSQM_Form_Elements_Data object
+	 *
+	 * @return     array
+	 */
+	public function currency_report_cal_cb( $element, $data, $m_key, $do_data, $return, $obj ) {
+		if ( empty( $data['value'] ) ) {
+			return $return;
+		}
+		$return[] = array(
+			'value' => $data['value'],
+			'name'  => $obj->data->f_name . ' ' . $obj->data->l_name,
+			'email' => $obj->data->email == '' ? __( 'anonymous', 'ipt_fsqm' ) : '<a href="mailto:' . $obj->data->email . '">' . $obj->data->email . '</a>',
+			'phone' => $obj->data->phone,
+			'date'  => date_i18n( get_option( 'date_format' ) . __(' \a\t ', 'ipt_fsqm') . get_option( 'time_format' ), strtotime( $obj->data->date ) ),
+			'id'    => $obj->data_id,
+		);
 
+		return $return;
 	}
 
 	/**
