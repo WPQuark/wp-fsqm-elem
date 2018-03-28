@@ -210,7 +210,7 @@ class IPT_FSQM_Ext_Elm {
 	 * @param      array   $element_data  Associative array of element settings
 	 */
 	public function ipicker_report_cb( $do_data, $element_data ) {
-		$iconpath = plugins_url( '/lib/images/icomoon/333/PNG/', IPT_FSQM_Loader::$abs_file );
+		
 		$ui = IPT_Plugin_UIF_Front::instance();
 		$data = array(
 			'icon1' => 0,
@@ -243,12 +243,12 @@ class IPT_FSQM_Ext_Elm {
 					</tfoot>
 					<tbody>
 						<tr>
-							<td><?php echo '<img src="' . $iconpath . $ui->get_icon_image_name( $element_data['settings']['icon1'] ) . '" height="16" width="16" /> '; ?></td>
+							<td><?php echo '<img src="' . $ui->get_image_for_icon( $element_data['settings']['icon1'] ) . '" height="16" width="16" /> '; ?></td>
 							<th><?php echo $element_data['settings']['icon1_label']; ?></th>
 							<td class="icon1">0</td>
 						</tr>
 						<tr>
-							<td><?php echo '<img src="' . $iconpath . $ui->get_icon_image_name( $element_data['settings']['icon2'] ) . '" height="16" width="16" /> '; ?></td>
+							<td><?php echo '<img src="' . $ui->get_image_for_icon( $element_data['settings']['icon2'] ) . '" height="16" width="16" /> '; ?></td>
 							<th><?php echo $element_data['settings']['icon2_label']; ?></th>
 							<td class="icon2">0</td>
 						</tr>
@@ -488,9 +488,9 @@ class IPT_FSQM_Ext_Elm {
 	}
 
 	public function ipicker_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
-		$checked = '<img src="' . $that->icon_path . 'radio-checked.png" height="16" width="16" />';
-		$unchecked = '<img src="' . $that->icon_path . 'radio-unchecked.png" height="16" width="16" />';
 		$ui = IPT_Plugin_UIF_Front::instance();
+		$checked = '<img src="' . $ui->get_image_for_icon( 0xe190 ) . '" height="16" width="16" />';
+		$unchecked = '<img src="' . $ui->get_image_for_icon( 0xe191 ) . '" height="16" width="16" />';
 		?>
 		<th style="<?php echo $that->email_styling['th']; ?>" colspan="2" rowspan="2" scope="row">
 			<?php echo $element_data['title']; ?><br /><span class="description" style="<?php echo $that->email_styling['description']; ?>"><?php echo $element_data['subtitle']; ?></span>
@@ -508,7 +508,7 @@ class IPT_FSQM_Ext_Elm {
 		} ?>
 		</td>
 		<td style="<?php echo $that->email_styling['td']; ?>" colspan="2">
-			<?php echo '<img src="' . $that->icon_path . $ui->get_icon_image_name( $element_data['settings']['icon1'] ) . '" height="16" width="16" /> ' . $element_data['settings']['icon1_label']; ?>
+			<?php echo '<img src="' . $ui->get_image_for_icon( $element_data['settings']['icon1'] ) . '" height="16" width="16" /> ' . $element_data['settings']['icon1_label']; ?>
 		</td>
 	</tr>
 	<tr>
@@ -520,7 +520,7 @@ class IPT_FSQM_Ext_Elm {
 		} ?>
 		</td>
 		<td style="<?php echo $that->email_styling['td']; ?>" colspan="2">
-			<?php echo '<img src="' . $that->icon_path . $ui->get_icon_image_name( $element_data['settings']['icon2'] ) . '" height="16" width="16" /> ' . $element_data['settings']['icon2_label']; ?>
+			<?php echo '<img src="' . $ui->get_image_for_icon( $element_data['settings']['icon2'] ) . '" height="16" width="16" /> ' . $element_data['settings']['icon2_label']; ?>
 		</td>
 		<?php
 	}
@@ -807,7 +807,7 @@ class IPT_FSQM_Ext_Elm {
 
 	public function currency_cb_data( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
 		$ui = IPT_Plugin_UIF_Front::instance();
-		$img = '<img src="' . $that->icon_path . $ui->get_icon_image_name( $element_data['settings']['icon'] ) . '" height="16" width="16" /> ';
+		$img = '<img src="' . $ui->get_image_for_icon( $element_data['settings']['icon'] ) . '" height="16" width="16" /> ';
 		?>
 		<th style="<?php echo $that->email_styling['th']; ?>" colspan="2" scope="row">
 			<?php echo $element_data['title']; ?><br /><span class="description" style="<?php echo $that->email_styling['description']; ?>"><?php echo $element_data['subtitle']; ?></span>
