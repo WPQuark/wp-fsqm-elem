@@ -55,27 +55,29 @@ class IPT_FSQM_Ext_Elm {
 		// Add our MCQ element
 		// It is basically a picker for icons
 		$elements['mcq']['elements']['ipicker'] = array(
-			'title' => __( 'Icon Picker', 'fsqm_elm' ),
-			'description' => __( 'Let your user pick between icons', 'fsqm_elm' ),
-			'm_type' => 'mcq',
-			'type' => 'ipicker',
-			'callback' => array( $this, 'ipicker_cb' ), // Callbacks for Admin/Data/Front classes
-			'callback_report' => array( $this, 'ipicker_report_cb' ), // Callback for report generator
-			'callback_report_calculator' => array( $this, 'ipicker_report_cal_cb' ), // Callback for report calculator
-			'callback_data_validation' => array( $this, 'ipicker_validation' ), // Callback for data validation on server side
+			'title'                      => __( 'Icon Picker', 'fsqm_elm' ),
+			'description'                => __( 'Let your user pick between icons', 'fsqm_elm' ),
+			'm_type'                     => 'mcq',
+			'type'                       => 'ipicker',
+			'callback'                   => array( $this, 'ipicker_cb' ),                           // Callbacks for Admin/Data/Front classes
+			'callback_report'            => array( $this, 'ipicker_report_cb' ),                    // Callback for report generator
+			'callback_report_calculator' => array( $this, 'ipicker_report_cal_cb' ),                // Callback for report calculator
+			'callback_data_validation'   => array( $this, 'ipicker_validation' ),                   // Callback for data validation on server side
+			'callback_value'             => [ $this, 'ipicker_cb_value' ],                          // Callback for value class
 		);
 
 		// Add our freetype element
 		// It is basically a currency input
 		$elements['freetype']['elements']['currency'] = array(
-			'title' => __( 'Currency Input', 'fsqm_elm' ),
-			'description' => __( 'Let your user enter an amount in specified currency', 'fsqm_elm' ),
-			'm_type' => 'freetype',
-			'type' => 'currency',
-			'callback' => array( $this, 'currency_cb' ), // Callbacks for Admin/Data/Front classes
-			'callback_report' => array( $this, 'currency_report_cb' ), // Callback for report generator
-			'callback_report_calculator' => array( $this, 'currency_report_cal_cb' ), // Callback for report calculator
-			'callback_data_validation' => array( $this, 'currency_validation' ), // Callback for data validation on server side
+			'title'                      => __( 'Currency Input', 'fsqm_elm' ),
+			'description'                => __( 'Let your user enter an amount in specified currency', 'fsqm_elm' ),
+			'm_type'                     => 'freetype',
+			'type'                       => 'currency',
+			'callback'                   => array( $this, 'currency_cb' ),                                             // Callbacks for Admin/Data/Front classes
+			'callback_report'            => array( $this, 'currency_report_cb' ),                                      // Callback for report generator
+			'callback_report_calculator' => array( $this, 'currency_report_cal_cb' ),                                  // Callback for report calculator
+			'callback_data_validation'   => array( $this, 'currency_validation' ),                                     // Callback for data validation on server side
+			'callback_value'             => [ $this, 'currency_cb_value' ],                                            // Callback for value class
 		);
 
 		return $elements;
@@ -519,6 +521,19 @@ class IPT_FSQM_Ext_Elm {
 		<?php
 	}
 
+	public function ipicker_cb_value( $element, $submission, $type, $data, $key ) {
+		$return = [];
+		if ( 'label' == $data ) {
+			$return['value'] = $element['settings'][ $submission['value'] . '_label' ];
+		} else {
+			$return['value'] = $submission['value'];
+		}
+		if ( 'string' === $type ) {
+			return $return['value'];
+		}
+		return $return;
+	}
+
 
 	/*==========================================================================
 	 * Methods for actually implementing the currency element
@@ -851,5 +866,14 @@ class IPT_FSQM_Ext_Elm {
 			<?php echo '<code>' . $submission_data['value'] . '</code>'; ?>
 		</td>
 		<?php
+	}
+
+	public function currency_cb_value( $element, $submission, $type, $data, $key ) {
+		if ( 'string' == $type ) {
+			return $submission['value'];
+		}
+		return [
+			'value' => $submission['value'],
+		];
 	}
 }
