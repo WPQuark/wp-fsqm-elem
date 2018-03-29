@@ -218,7 +218,7 @@ class IPT_FSQM_Ext_Elm {
 	 * @param      bool    $do_data       True if sensitive data can be printed
 	 * @param      array   $element_data  Associative array of element settings
 	 */
-	public function ipicker_report_cb( $do_data, $element_data ) {
+	public function ipicker_report_cb( $visualization, $element_data, $do_data, $do_names, $do_date, $do_others, $sensitive_data, $theader, $that ) {
 
 		$ui = IPT_Plugin_UIF_Front::instance();
 		$data = array(
@@ -229,7 +229,7 @@ class IPT_FSQM_Ext_Elm {
 <table class="ipt_fsqm_preview table_to_update">
 	<thead>
 		<tr>
-			<th style="width: 50%"><?php _e( 'Graphical Representation', 'ipt_cs' ); ?></th>
+			<th style="width: 50%"><?php echo $visualization; ?></th>
 			<th style="width: 50%"><?php _e( 'Data', 'ipt_cs' ); ?></th>
 		</tr>
 	</thead>
@@ -283,7 +283,7 @@ class IPT_FSQM_Ext_Elm {
 	 *
 	 * @return     array
 	 */
-	public function ipicker_report_cal_cb( $element, $data, $m_key, $do_data, $return, $obj ) {
+	public function ipicker_report_cal_cb( $element, $data, $m_key, $do_data, $do_names, $do_others, $sensitive_data, $do_date, $return, $obj ) {
 		if ( ! is_array( $return ) || empty( $return ) ) {
 			$return = array(
 				'icon1' => 0,
@@ -542,40 +542,66 @@ class IPT_FSQM_Ext_Elm {
 		}
 	}
 
-	public function currency_report_cb( $element_data ) {
+	public function currency_report_cb( $element_data, $do_names, $do_date, $sensitive_data, $theader, $that ) {
+		$data = array();
+
 		$pinfo_titles = array(
 			'name' => __( 'Name', 'fsqm_elm' ),
 			'email' => __( 'Email', 'fsqm_elm' ),
 			'phone' => __( 'Phone', 'fsqm_elm' ),
 		);
 
-		$data = array();
+		foreach ( $that->pinfo as $pinfo ) {
+			if ( in_array( $pinfo['type'], array_keys( $pinfo_titles ) ) ) {
+				$pinfo_titles[ $pinfo['type'] ] = $pinfo['title'];
+			}
+		}
 
+		if ( ! $sensitive_data ) {
+			unset( $pinfo_titles['email'] );
+			unset( $pinfo_titles['phone'] );
+		}
+
+		if ( ! $do_names ) {
+			unset( $pinfo_titles['name'] );
+		}
+
+		// NOTE: We increase pinfo count if do_date is set to true
+		$pinfo_count = count( $pinfo_titles );
+		if ( $do_date ) {
+			$pinfo_count++;
+		}
 		?>
-<table class="ipt_fsqm_preview">
+<table class="ipt_fsqm_preview table_to_update">
+	<?php if ( $theader ) : ?>
 	<thead>
 		<tr>
-			<th style="width: 40%;"><?php _e( 'Feedback', 'fsqm_elm' ); ?></th>
+			<th style="width: 40%;"><?php _e( 'Feedback', 'ipt_fsqm' ); ?></th>
 			<?php foreach ( $pinfo_titles as $p_val ) : ?>
 			<th><?php echo $p_val; ?></th>
 			<?php endforeach; ?>
-			<th><?php _e( 'Date', 'fsqm_elm' ); ?></th>
+			<?php if ( $do_date ) : ?>
+			<th style="width: 10%"><?php _e( 'Date', 'ipt_fsqm' ); ?></th>
+			<?php endif; ?>
 		</tr>
 	</thead>
-	<tbody>
-		<tr class="empty">
-			<td colspan="5"><?php _e( 'No data yet!', 'fsqm_elm' ); ?></td>
-		</tr>
-	</tbody>
 	<tfoot>
 		<tr>
-			<th style="width: 40%;"><?php _e( 'Feedback', 'fsqm_elm' ); ?></th>
+			<th style="width: 40%;"><?php _e( 'Feedback', 'ipt_fsqm' ); ?></th>
 			<?php foreach ( $pinfo_titles as $p_val ) : ?>
 			<th><?php echo $p_val; ?></th>
 			<?php endforeach; ?>
-			<th><?php _e( 'Date', 'fsqm_elm' ); ?></th>
+			<?php if ( $do_date ) : ?>
+			<th style="width: 10%"><?php _e( 'Date', 'ipt_fsqm' ); ?></th>
+			<?php endif; ?>
 		</tr>
 	</tfoot>
+	<?php endif; ?>
+	<tbody>
+		<tr class="empty">
+			<td colspan="<?php echo ( $pinfo_count + 1 ); ?>"><?php _e( 'No data yet!', 'ipt_fsqm' ); ?></td>
+		</tr>
+	</tbody>
 </table>
 		<?php
 		return $data;
@@ -593,18 +619,28 @@ class IPT_FSQM_Ext_Elm {
 	 *
 	 * @return     array
 	 */
-	public function currency_report_cal_cb( $element, $data, $m_key, $do_data, $return, $obj ) {
+	public function currency_report_cal_cb( $element, $data, $m_key, $do_data, $do_names, $sensitive_data, $do_date, $return, $obj ) {
 		if ( empty( $data['value'] ) ) {
 			return $return;
 		}
-		$return[] = array(
+		$report_data = [
 			'value' => $data['value'],
-			'name'  => $obj->data->f_name . ' ' . $obj->data->l_name,
-			'email' => $obj->data->email == '' ? __( 'anonymous', 'ipt_fsqm' ) : '<a href="mailto:' . $obj->data->email . '">' . $obj->data->email . '</a>',
-			'phone' => $obj->data->phone,
-			'date'  => date_i18n( get_option( 'date_format' ) . __(' \a\t ', 'ipt_fsqm') . get_option( 'time_format' ), strtotime( $obj->data->date ) ),
-			'id'    => $obj->data_id,
-		);
+			// 'name'  => $obj->data->f_name . ' ' . $obj->data->l_name,
+		];
+		if ( $do_date ) {
+			$report_data['date'] = date_i18n( get_option( 'date_format' ) . __(' \a\t ', 'ipt_fsqm') . get_option( 'time_format' ), strtotime( $obj->data->date ) );
+		}
+		if ( $do_names ) {
+			$report_data['name'] = $obj->data->f_name . ' ' . $obj->data->l_name;
+		}
+
+		if ( $sensitive_data ) {
+			$report_data['email'] = $obj->data->email == '' ? __( 'anonymous', 'ipt_fsqm' ) : '<a href="mailto:' . $obj->data->email . '">' . $obj->data->email . '</a>';
+			$report_data['phone'] = $obj->data->phone;
+			$report_data['id']    = $obj->data_id;
+		}
+
+		$return[] = $report_data;
 
 		return $return;
 	}

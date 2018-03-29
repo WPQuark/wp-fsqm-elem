@@ -11,7 +11,7 @@
  * @param      {jQuery Object}  data_table       jQuery reference of data table
  * @param      {object}         op               Options
  */
-var fsqm_elm_report_ipicker_cb = function( element, e_data, response_data, methods, m_key, table_to_update, data_table, op ) {
+var fsqm_elm_report_ipicker_cb = function( element, e_data, response_data, m_key, table_to_update, data_table, op ) {
 	for ( var k in response_data ) {
 		e_data[k] += response_data[k];
 	}
@@ -29,7 +29,7 @@ var fsqm_elm_report_ipicker_cb = function( element, e_data, response_data, metho
  * @param      {jQuery Object}  data_table       jQuery reference of data table
  * @param      {object}         op               Options
  */
-var fsqm_elm_report_ipicker_gcb = function( element, e_data, methods, m_key, table_to_update, data_table, op ) {
+var fsqm_elm_report_ipicker_gcb = function( element, e_data, m_key, table_to_update, data_table, op, show_title, show_legend ) {
 	// First update the data table
 	for ( var k in e_data ) {
 		data_table.find('td.' + k).html( e_data[k] );
@@ -46,7 +46,7 @@ var fsqm_elm_report_ipicker_gcb = function( element, e_data, methods, m_key, tab
 	g_data[2] = [element.settings.icon2_label, e_data.icon2];
 
 	// Draw it
-	methods.drawPieChart( viz_div, g_data, element.title );
+	this.drawPieChart( viz_div, g_data, element.title, {}, show_title, show_legend );
 };
 
 /**
@@ -57,19 +57,31 @@ var fsqm_elm_report_ipicker_gcb = function( element, e_data, methods, m_key, tab
  * @param      {array}          e_data           Element data
  * @param      {object}         response_data    JSON response
  * @param      {object}         methods          Available methods of the calling script
- * @param      {int}            m_key            Key of element
+ * @param      {int}            f_key            Key of element
  * @param      {jQuery Object}  table_to_update  jQuery reference of table to update
  * @param      {object}         op               Options
  */
-var fsqm_elm_report_currency_cb = function( element, e_data, response_data, methods, m_key, table_to_update, op ) {
+var fsqm_elm_report_currency_cb = function( element, e_data, response_data, f_key, table_to_update, op ) {
+	var table_to_append = table_to_update.find('> tbody');
+	table_to_append.find('tr.empty').remove();
 	for(var feedback in response_data) {
 		var other = response_data[feedback];
-		new_tr = jQuery('<tr />');
+		var new_tr = $('<tr />');
 		new_tr.append('<th>' + other.value + '</th>');
-		new_tr.append('<td><a class="thickbox" href="' + op.ajaxurl + '?action=ipt_fsqm_quick_preview&id=' + other.id + '">' + other.name + '</a>');
-		new_tr.append('<td>' + other.email + '</td>');
-		new_tr.append('<td>' + other.phone + '</td>');
-		new_tr.append('<td>' + other.date + '</td>');
-		table_to_update.find('> tbody').append(new_tr);
+		if ( op.do_names ) {
+			if ( op.sensitive_data ) {
+				new_tr.append('<td><a class="thickbox" href="' + op.ajaxurl + '?action=ipt_fsqm_quick_preview&id=' + other.id + '">' + other.name + '</a></td>');
+			} else {
+				new_tr.append('<td>' + other.name + '</td>');
+			}
+		}
+		if ( op.sensitive_data ) {
+			new_tr.append('<td>' + other.email + '</td>');
+			new_tr.append('<td>' + other.phone + '</td>');
+		}
+		if ( op.do_date ) {
+			new_tr.append('<td>' + other.date + '</td>');
+		}
+		table_to_append.append(new_tr);
 	}
 };
