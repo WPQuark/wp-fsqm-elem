@@ -4,7 +4,7 @@
  * This class is responsible for extending FSQM Pro
  * With two more elements
  */
-class IPT_FSQM_Ext_Elm {
+class EForm_Extended_Element {
 	public static $absfile;
 	public static $absdir;
 	public static $version;
@@ -45,8 +45,8 @@ class IPT_FSQM_Ext_Elm {
 	public function report_enqueue() {
 		wp_enqueue_script( 'fsqm-elem-js', plugins_url( '/js/fsqm-elem-report.js', self::$absfile ), array('jquery'), self::$version );
 		wp_localize_script( 'fsqm-elem-js', 'fsqmElemJS', array(
-			'olabel' => __( 'Options', 'fsqm_elm' ),
-			'clabel' => __( 'Count', 'fsqm_elm' ),
+			'olabel' => __( 'Options', 'eform_elm' ),
+			'clabel' => __( 'Count', 'eform_elm' ),
 		) );
 	}
 
@@ -55,8 +55,8 @@ class IPT_FSQM_Ext_Elm {
 		// Add our MCQ element
 		// It is basically a picker for icons
 		$elements['mcq']['elements']['ipicker'] = array(
-			'title'                      => __( 'Icon Picker', 'fsqm_elm' ),
-			'description'                => __( 'Let your user pick between icons', 'fsqm_elm' ),
+			'title'                      => __( 'Icon Picker', 'eform_elm' ),
+			'description'                => __( 'Let your user pick between icons', 'eform_elm' ),
 			'm_type'                     => 'mcq',
 			'type'                       => 'ipicker',
 			'callback'                   => array( $this, 'ipicker_cb' ),                           // Callbacks for Admin/Data/Front classes
@@ -69,8 +69,8 @@ class IPT_FSQM_Ext_Elm {
 		// Add our freetype element
 		// It is basically a currency input
 		$elements['freetype']['elements']['currency'] = array(
-			'title'                      => __( 'Currency Input', 'fsqm_elm' ),
-			'description'                => __( 'Let your user enter an amount in specified currency', 'fsqm_elm' ),
+			'title'                      => __( 'Currency Input', 'eform_elm' ),
+			'description'                => __( 'Let your user enter an amount in specified currency', 'eform_elm' ),
 			'm_type'                     => 'freetype',
 			'type'                       => 'currency',
 			'callback'                   => array( $this, 'currency_cb' ),                                             // Callbacks for Admin/Data/Front classes
@@ -113,7 +113,7 @@ class IPT_FSQM_Ext_Elm {
 						'vertical' => false,
 						'centered' => false,
 						'hidden_label' => false,
-						'placeholder' => __( 'Enter Currency', 'ipt_fsqm' ),
+						'placeholder' => __( 'Enter Currency', 'eform_elm' ),
 						'icon' => 0xf155, // To be used with fonticonpicker
 						'max' => '',
 						'min' => '',
@@ -151,9 +151,9 @@ class IPT_FSQM_Ext_Elm {
 						'centered' => false,
 						'hidden_label' => false,
 						'icon1' => 0xe0eb,
-						'icon1_label' => __( 'Heart filled with love', 'fsqm_elm' ),
+						'icon1_label' => __( 'Heart filled with love', 'eform_elm' ),
 						'icon2' => 0xe0ed,
-						'icon2_label' => __( 'Broken Heart', 'fsqm_elm' ),
+						'icon2_label' => __( 'Broken Heart', 'eform_elm' ),
 					),
 				);
 				break;
@@ -350,59 +350,59 @@ class IPT_FSQM_Ext_Elm {
 
 		// 'settings' => array(
 		// 	'icon1' => 0xe0d1,
-		// 	'icon1_label' => __( 'Heart filled with love', 'fsqm_elm' ),
+		// 	'icon1_label' => __( 'Heart filled with love', 'eform_elm' ),
 		// 	'icon2' => 0xe0d3,
-		// 	'icon2_label' => __( 'Broken Heart', 'fsqm_elm' ),
+		// 	'icon2_label' => __( 'Broken Heart', 'eform_elm' ),
 		// ),
 		$tab_names = $that->ui->generate_id_from_name( $name_prefix ) . '_settings_tab_';
 ?>
 	<div class="ipt_uif_tabs">
 		<ul>
-			<li><a href="#<?php echo $tab_names; ?>_elm"><?php _e( 'Appearance', 'ipt_fsqm' ); ?></a></li>
-			<li><a href="#<?php echo $tab_names; ?>_ifs"><?php _e( 'Interface', 'ipt_fsqm' ); ?></a></li>
-			<li><a href="#<?php echo $tab_names; ?>_validation"><?php _e( 'Validation', 'ipt_fsqm' ); ?></a></li>
-			<li><a href="#<?php echo $tab_names; ?>_logic"><?php _e( 'Logic', 'ipt_fsqm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_elm"><?php _e( 'Appearance', 'eform_elm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_ifs"><?php _e( 'Interface', 'eform_elm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_validation"><?php _e( 'Validation', 'eform_elm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_logic"><?php _e( 'Logic', 'eform_elm' ); ?></a></li>
 		</ul>
 		<div id="<?php echo $tab_names; ?>_elm">
 			<table class="form-table">
 				<tbody>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[title]', __( 'Title', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
+						<th><?php $that->ui->generate_label( $name_prefix . '[title]', __( 'Title', 'eform_elm' ) ); ?></th>
+						<td><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'eform_elm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[subtitle]', __( 'Subtitle', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
+						<th><?php $that->ui->generate_label( $name_prefix . '[subtitle]', __( 'Subtitle', 'eform_elm' ) ); ?></th>
+						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'eform_elm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][vertical]', __( 'Label Alignment', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][vertical]', __( 'Label Alignment', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'ipt_fsqm' ), __( 'Horizontal', 'ipt_fsqm' ), $element_data['settings']['vertical'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'eform_elm' ), __( 'Horizontal', 'eform_elm' ), $element_data['settings']['vertical'], '1' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'The alignment of the label(question) and options. Making Horizontal will show the label on left, whereas making vertical will show it on top.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'The alignment of the label(question) and options. Making Horizontal will show the label on left, whereas making vertical will show it on top.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][centered]', __( 'Center Content', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][centered]', __( 'Center Content', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['centered'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'eform_elm' ), __( 'No', 'eform_elm' ), $element_data['settings']['centered'], '1' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'If enabled, then labels and elements will be centered. This will force vertical the content.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'If enabled, then labels and elements will be centered. This will force vertical the content.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][hidden_label]', __( 'Hide Label', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][hidden_label]', __( 'Hide Label', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['hidden_label'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'eform_elm' ), __( 'No', 'eform_elm' ), $element_data['settings']['hidden_label'], '1' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'If enabled, then label along with subtitle and description would be hidden on the form. It would be visible only on the summary table and on emails. When using this, place a meaningful text in the placeholder.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'If enabled, then label along with subtitle and description would be hidden on the form. It would be visible only on the summary table and on emails. When using this, place a meaningful text in the placeholder.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[tooltip]', __( 'Tooltip', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[tooltip]', __( 'Tooltip', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $element_data['tooltip'], __( 'HTML Enabled', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $element_data['tooltip'], __( 'HTML Enabled', 'eform_elm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'If you want to show tooltip, then please enter it here. You can write custom HTML too. Leave empty to disable.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'If you want to show tooltip, then please enter it here. You can write custom HTML too. Leave empty to disable.', 'eform_elm' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -411,32 +411,32 @@ class IPT_FSQM_Ext_Elm {
 			<table class="form-table">
 				<tbody>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon1]', __( 'First Icon', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon1]', __( 'First Icon', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon1]', $element_data['settings']['icon1'], __( 'Do not use any icon', 'fsqm_elm' ) ); ?>
+							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon1]', $element_data['settings']['icon1'], __( 'Do not use any icon', 'eform_elm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Select the icon', 'fsqm_elm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Select the icon', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon1_label]', __( 'First Icon Label', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon1_label]', __( 'First Icon Label', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->text( $name_prefix . '[settings][icon1_label]', $element_data['settings']['icon1_label'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->text( $name_prefix . '[settings][icon1_label]', $element_data['settings']['icon1_label'], __( 'Enter the label', 'eform_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter the label for this icon.', 'fsqm_elm' ) ) ?></td>
+						<td><?php $that->ui->help( __( 'Enter the label for this icon.', 'eform_elm' ) ) ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon2]', __( 'Second Icon', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon2]', __( 'Second Icon', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon2]', $element_data['settings']['icon2'], __( 'Do not use any icon', 'fsqm_elm' ) ); ?>
+							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon2]', $element_data['settings']['icon2'], __( 'Do not use any icon', 'eform_elm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Select the icon', 'fsqm_elm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Select the icon', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon2_label]', __( 'Second Icon Label', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon2_label]', __( 'Second Icon Label', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->text( $name_prefix . '[settings][icon2_label]', $element_data['settings']['icon2_label'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->text( $name_prefix . '[settings][icon2_label]', $element_data['settings']['icon2_label'], __( 'Enter the label', 'eform_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter the label for this icon.', 'fsqm_elm' ) ) ?></td>
+						<td><?php $that->ui->help( __( 'Enter the label for this icon.', 'eform_elm' ) ) ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -561,9 +561,9 @@ class IPT_FSQM_Ext_Elm {
 		$data = array();
 
 		$pinfo_titles = array(
-			'name' => __( 'Name', 'fsqm_elm' ),
-			'email' => __( 'Email', 'fsqm_elm' ),
-			'phone' => __( 'Phone', 'fsqm_elm' ),
+			'name' => __( 'Name', 'eform_elm' ),
+			'email' => __( 'Email', 'eform_elm' ),
+			'phone' => __( 'Phone', 'eform_elm' ),
 		);
 
 		foreach ( $that->pinfo as $pinfo ) {
@@ -591,30 +591,30 @@ class IPT_FSQM_Ext_Elm {
 	<?php if ( $theader ) : ?>
 	<thead>
 		<tr>
-			<th style="width: 40%;"><?php _e( 'Feedback', 'ipt_fsqm' ); ?></th>
+			<th style="width: 40%;"><?php _e( 'Feedback', 'eform_elm' ); ?></th>
 			<?php foreach ( $pinfo_titles as $p_val ) : ?>
 			<th><?php echo $p_val; ?></th>
 			<?php endforeach; ?>
 			<?php if ( $do_date ) : ?>
-			<th style="width: 10%"><?php _e( 'Date', 'ipt_fsqm' ); ?></th>
+			<th style="width: 10%"><?php _e( 'Date', 'eform_elm' ); ?></th>
 			<?php endif; ?>
 		</tr>
 	</thead>
 	<tfoot>
 		<tr>
-			<th style="width: 40%;"><?php _e( 'Feedback', 'ipt_fsqm' ); ?></th>
+			<th style="width: 40%;"><?php _e( 'Feedback', 'eform_elm' ); ?></th>
 			<?php foreach ( $pinfo_titles as $p_val ) : ?>
 			<th><?php echo $p_val; ?></th>
 			<?php endforeach; ?>
 			<?php if ( $do_date ) : ?>
-			<th style="width: 10%"><?php _e( 'Date', 'ipt_fsqm' ); ?></th>
+			<th style="width: 10%"><?php _e( 'Date', 'eform_elm' ); ?></th>
 			<?php endif; ?>
 		</tr>
 	</tfoot>
 	<?php endif; ?>
 	<tbody>
 		<tr class="empty">
-			<td colspan="<?php echo ( $pinfo_count + 1 ); ?>"><?php _e( 'No data yet!', 'ipt_fsqm' ); ?></td>
+			<td colspan="<?php echo ( $pinfo_count + 1 ); ?>"><?php _e( 'No data yet!', 'eform_elm' ); ?></td>
 		</tr>
 	</tbody>
 </table>
@@ -643,14 +643,14 @@ class IPT_FSQM_Ext_Elm {
 			// 'name'  => $obj->data->f_name . ' ' . $obj->data->l_name,
 		];
 		if ( $do_date ) {
-			$report_data['date'] = date_i18n( get_option( 'date_format' ) . __(' \a\t ', 'ipt_fsqm') . get_option( 'time_format' ), strtotime( $obj->data->date ) );
+			$report_data['date'] = date_i18n( get_option( 'date_format' ) . __(' \a\t ', 'eform_elm') . get_option( 'time_format' ), strtotime( $obj->data->date ) );
 		}
 		if ( $do_names ) {
 			$report_data['name'] = $obj->data->f_name . ' ' . $obj->data->l_name;
 		}
 
 		if ( $sensitive_data ) {
-			$report_data['email'] = $obj->data->email == '' ? __( 'anonymous', 'ipt_fsqm' ) : '<a href="mailto:' . $obj->data->email . '">' . $obj->data->email . '</a>';
+			$report_data['email'] = $obj->data->email == '' ? __( 'anonymous', 'eform_elm' ) : '<a href="mailto:' . $obj->data->email . '">' . $obj->data->email . '</a>';
 			$report_data['phone'] = $obj->data->phone;
 			$report_data['id']    = $obj->data_id;
 		}
@@ -716,65 +716,65 @@ class IPT_FSQM_Ext_Elm {
 		?>
 	<div class="ipt_uif_tabs">
 		<ul>
-			<li><a href="#<?php echo $tab_names; ?>_elm"><?php _e( 'Appearance', 'ipt_fsqm' ); ?></a></li>
-			<li><a href="#<?php echo $tab_names; ?>_ifs"><?php _e( 'Interface', 'ipt_fsqm' ); ?></a></li>
-			<li><a href="#<?php echo $tab_names; ?>_validation"><?php _e( 'Validation', 'ipt_fsqm' ); ?></a></li>
-			<li><a href="#<?php echo $tab_names; ?>_logic"><?php _e( 'Logic', 'ipt_fsqm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_elm"><?php _e( 'Appearance', 'eform_elm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_ifs"><?php _e( 'Interface', 'eform_elm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_validation"><?php _e( 'Validation', 'eform_elm' ); ?></a></li>
+			<li><a href="#<?php echo $tab_names; ?>_logic"><?php _e( 'Logic', 'eform_elm' ); ?></a></li>
 		</ul>
 		<div id="<?php echo $tab_names; ?>_elm">
 			<table class="form-table">
 				<tbody>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[title]', __( 'Title', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
+						<th><?php $that->ui->generate_label( $name_prefix . '[title]', __( 'Title', 'eform_elm' ) ); ?></th>
+						<td><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'eform_elm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[subtitle]', __( 'Subtitle', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
+						<th><?php $that->ui->generate_label( $name_prefix . '[subtitle]', __( 'Subtitle', 'eform_elm' ) ); ?></th>
+						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'eform_elm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][vertical]', __( 'Label Alignment', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][vertical]', __( 'Label Alignment', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'ipt_fsqm' ), __( 'Horizontal', 'ipt_fsqm' ), $element_data['settings']['vertical'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'eform_elm' ), __( 'Horizontal', 'eform_elm' ), $element_data['settings']['vertical'], '1' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'The alignment of the label(question) and options. Making Horizontal will show the label on left, whereas making vertical will show it on top.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'The alignment of the label(question) and options. Making Horizontal will show the label on left, whereas making vertical will show it on top.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][centered]', __( 'Center Content', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][centered]', __( 'Center Content', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['centered'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'eform_elm' ), __( 'No', 'eform_elm' ), $element_data['settings']['centered'], '1' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'If enabled, then labels and elements will be centered. This will force vertical the content.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'If enabled, then labels and elements will be centered. This will force vertical the content.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][hidden_label]', __( 'Hide Label', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][hidden_label]', __( 'Hide Label', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['hidden_label'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'eform_elm' ), __( 'No', 'eform_elm' ), $element_data['settings']['hidden_label'], '1' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'If enabled, then label along with subtitle and description would be hidden on the form. It would be visible only on the summary table and on emails. When using this, place a meaningful text in the placeholder.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'If enabled, then label along with subtitle and description would be hidden on the form. It would be visible only on the summary table and on emails. When using this, place a meaningful text in the placeholder.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][placeholder]', __( 'Placeholder Text', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][placeholder]', __( 'Placeholder Text', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->text( $name_prefix . '[settings][placeholder]', $element_data['settings']['placeholder'], __( 'Disabled', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->text( $name_prefix . '[settings][placeholder]', $element_data['settings']['placeholder'], __( 'Disabled', 'eform_elm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Text that is shown by default when the field is empty.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Text that is shown by default when the field is empty.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon]', __( 'Select Icon', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon]', __( 'Select Icon', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon]', $element_data['settings']['icon'], __( 'Do not use any icon', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon]', $element_data['settings']['icon'], __( 'Do not use any icon', 'eform_elm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Select the icon you want to appear before the text. Select none to disable.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Select the icon you want to appear before the text. Select none to disable.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[tooltip]', __( 'Tooltip', 'ipt_fsqm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[tooltip]', __( 'Tooltip', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $element_data['tooltip'], __( 'HTML Enabled', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $element_data['tooltip'], __( 'HTML Enabled', 'eform_elm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'If you want to show tooltip, then please enter it here. You can write custom HTML too. Leave empty to disable.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'If you want to show tooltip, then please enter it here. You can write custom HTML too. Leave empty to disable.', 'eform_elm' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -784,25 +784,25 @@ class IPT_FSQM_Ext_Elm {
 				<tbody>
 					<?php //$that->_helper_build_prefil_text( $name_prefix, $data ); ?>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][min]', __( 'Minumum Input', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][min]', __( 'Minumum Input', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->spinner( $name_prefix . '[settings][min]', $element_data['settings']['min'], __( 'Enter Min Value', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->spinner( $name_prefix . '[settings][min]', $element_data['settings']['min'], __( 'Enter Min Value', 'eform_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter minimum input.', 'fsqm_elm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Enter minimum input.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][max]', __( 'Maximum Input', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][max]', __( 'Maximum Input', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->spinner( $name_prefix . '[settings][max]', $element_data['settings']['max'], __( 'Enter Max Value', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->spinner( $name_prefix . '[settings][max]', $element_data['settings']['max'], __( 'Enter Max Value', 'eform_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter Maximum input.', 'fsqm_elm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Enter Maximum input.', 'eform_elm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][step]', __( 'Input Step', 'fsqm_elm' ) ); ?></th>
+						<th><?php $that->ui->generate_label( $name_prefix . '[settings][step]', __( 'Input Step', 'eform_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->spinner( $name_prefix . '[settings][step]', $element_data['settings']['step'], __( 'Enter Step Value', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->spinner( $name_prefix . '[settings][step]', $element_data['settings']['step'], __( 'Enter Step Value', 'eform_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter input step.', 'fsqm_elm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Enter input step.', 'eform_elm' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>

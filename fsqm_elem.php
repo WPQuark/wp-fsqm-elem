@@ -1,19 +1,19 @@
 <?php
 /*
-Plugin Name: FSQM Pro Extended Elements
-Description: This plugin boilerplate shows how you can extend FSQM Pro elements
-Plugin URI: http://ipaneltheme.com
-Author: iPanelThemes
-Author URI: http://ipanelthemes.com
-Version: 1.0
+Plugin Name: eForm Extended Elements
+Description: This plugin boilerplate shows how you can extend eForm elements
+Plugin URI: https://wpquark.com
+Author: Swashata
+Author URI: https://swashata.me
+Version: 4.2.0
 License: GPL3
-Text Domain: fsqm_elm
+Text Domain: efom_elm
 Domain Path: /translations
 */
 
 /*
 
-    Copyright (C) 2016  iPanelThemes  contact@ipanelthemes.com
+    Copyright (C) 2016  WPQuark  contact@wpquark.com
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -29,6 +29,6 @@ Domain Path: /translations
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once dirname( __FILE__ ) . '/classes/class-ipt-fsqm-ext-elm.php';
+require_once dirname( __FILE__ ) . '/classes/class-eform-extended-element.php';
 
-$ipt_fsqm_ext_elm = new IPT_FSQM_Ext_Elm( __FILE__, dirname( __FILE__ ), '1.0.0' );
+$eform_ext_elm = new EForm_Extended_Element( __FILE__, dirname( __FILE__ ), '4.2.0' );
