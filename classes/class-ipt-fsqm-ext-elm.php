@@ -100,13 +100,18 @@ class IPT_FSQM_Ext_Elm {
 				$default = array(
 					'type' => $element, // Required
 					'm_type' => 'freetype', // Required
-					'title' => '', // Default element title for frontend
+					'title' => 'Currency Input Title', // Default element title for frontend
+					'subtitle' => '', // Default element subtitle for frontend
 					'validation' => array(
 						'required' => false, // Validation array
 					),
-					'subtitle' => '', // Default element subtitle for frontend
 					'description' => '', // Default element description for frontend
+					'tooltip' => '',
 					'settings'   => array(
+						'vertical' => false,
+						'centered' => false,
+						'hidden_label' => false,
+						'placeholder' => __( 'Enter Currency', 'ipt_fsqm' ),
 						'icon' => 0xf155, // To be used with fonticonpicker
 						'max' => '',
 						'min' => '',
@@ -126,12 +131,13 @@ class IPT_FSQM_Ext_Elm {
 				$default = array(
 					'm_type' => 'mcq',
 					'type' => 'ipicker',
-					'title' => '',
+					'title' => 'IconPicker Title',
+					'subtitle' => '',
 					'validation' => array(
 						'required' => false,
 					),
-					'subtitle' => '',
 					'description' => '',
+					'tooltip' => '',
 					'conditional' => array(
 						'active' => false,
 						'status' => false,
@@ -139,6 +145,9 @@ class IPT_FSQM_Ext_Elm {
 						'logic' => array(),
 					),
 					'settings' => array(
+						'vertical' => false,
+						'centered' => false,
+						'hidden_label' => false,
 						'icon1' => 0xe0eb,
 						'icon1_label' => __( 'Heart filled with love', 'fsqm_elm' ),
 						'icon2' => 0xe0ed,
@@ -210,7 +219,7 @@ class IPT_FSQM_Ext_Elm {
 	 * @param      array   $element_data  Associative array of element settings
 	 */
 	public function ipicker_report_cb( $do_data, $element_data ) {
-		
+
 		$ui = IPT_Plugin_UIF_Front::instance();
 		$data = array(
 			'icon1' => 0,
@@ -343,7 +352,6 @@ class IPT_FSQM_Ext_Elm {
 		// 	'icon2' => 0xe0d3,
 		// 	'icon2_label' => __( 'Broken Heart', 'fsqm_elm' ),
 		// ),
-		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
 		$tab_names = $that->ui->generate_id_from_name( $name_prefix ) . '_settings_tab_';
 ?>
 	<div class="ipt_uif_tabs">
@@ -358,53 +366,39 @@ class IPT_FSQM_Ext_Elm {
 				<tbody>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[title]', __( 'Title', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[title]', $data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
+						<td><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[subtitle]', __( 'Subtitle', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
+						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][vertical]', __( 'Label Alignment', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'ipt_fsqm' ), __( 'Horizontal', 'ipt_fsqm' ), $data['settings']['vertical'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'ipt_fsqm' ), __( 'Horizontal', 'ipt_fsqm' ), $element_data['settings']['vertical'], '1' ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'The alignment of the label(question) and options. Making Horizontal will show the label on left, whereas making vertical will show it on top.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][centered]', __( 'Center Content', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $data['settings']['centered'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['centered'], '1' ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'If enabled, then labels and elements will be centered. This will force vertical the content.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][hidden_label]', __( 'Hide Label', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $data['settings']['hidden_label'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['hidden_label'], '1' ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'If enabled, then label along with subtitle and description would be hidden on the form. It would be visible only on the summary table and on emails. When using this, place a meaningful text in the placeholder.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][placeholder]', __( 'Placeholder Text', 'ipt_fsqm' ) ); ?></th>
-						<td>
-							<?php $that->ui->text( $name_prefix . '[settings][placeholder]', $data['settings']['placeholder'], __( 'Disabled', 'ipt_fsqm' ) ); ?>
-						</td>
-						<td><?php $that->ui->help( __( 'Text that is shown by default when the field is empty.', 'ipt_fsqm' ) ); ?></td>
-					</tr>
-					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon]', __( 'Select Icon', 'ipt_fsqm' ) ); ?></th>
-						<td>
-							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon]', $data['settings']['icon'], __( 'Do not use any icon', 'ipt_fsqm' ) ); ?>
-						</td>
-						<td><?php $that->ui->help( __( 'Select the icon you want to appear before the text. Select none to disable.', 'ipt_fsqm' ) ) ?></td>
-					</tr>
-					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[tooltip]', __( 'Tooltip', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $data['tooltip'], __( 'HTML Enabled', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $element_data['tooltip'], __( 'HTML Enabled', 'ipt_fsqm' ) ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'If you want to show tooltip, then please enter it here. You can write custom HTML too. Leave empty to disable.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
@@ -446,14 +440,14 @@ class IPT_FSQM_Ext_Elm {
 			</table>
 		</div>
 		<div id="<?php echo $tab_names; ?>_validation">
-			<?php $that->build_validation( $name_prefix, $element_structure['validation'], $data['validation'] ); ?>
+			<?php $that->build_validation( $name_prefix, $element_structure['validation'], $element_data['validation'] ); ?>
 		</div>
 		<div id="<?php echo $tab_names; ?>_logic">
-			<?php $that->build_conditional( $name_prefix, $data['conditional'] ); ?>
+			<?php $that->build_conditional( $name_prefix, $element_data['conditional'] ); ?>
 		</div>
 	</div>
 	<?php
-		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $data['description'], '' );
+		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
 	}
 
 	/**
@@ -481,9 +475,9 @@ class IPT_FSQM_Ext_Elm {
 			'value' => 'icon2',
 		);
 		$param = array( $name_prefix . '[value]', $items, $submission_data['value'], $element_data['validation'], 2 );
-		$id = 'ipt_fsqm_form_' . $that->form_id . '_' . $element_structure['m_type'] . '_' . $key;
-		$that->ui->column_head( $id, 'full', true, 'ipt_fsqm_container_radio' );
-		$that->ui->question_container( $name_prefix, $element_data['title'], $element_data['subtitle'], array( array( $that->ui, 'radios' ), $param ), $element_data['validation']['required'], false, false, $element_data['description'] );
+		$id = 'ipt_fsqm_form_' . $that->form_id . '_' . $element_structure['m_type'] . '_' . $key . '_wrap';
+		$that->ui->column_head( $id, 'full', true, 'ipt_fsqm_container_ipicker', $element_data['tooltip'] );
+		$that->ui->question_container( $name_prefix, $element_data['title'], $element_data['subtitle'], array( array( $that->ui, 'radios' ), $param ), $element_data['validation']['required'], false, $element_data['settings']['vertical'], $element_data['description'], [], [], $element_data['settings']['hidden_label'], $element_data['settings']['centered'] );
 		$that->ui->column_tail();
 	}
 
@@ -667,8 +661,7 @@ class IPT_FSQM_Ext_Elm {
 		// 	'step' => '',
 		// ),
 		//
-		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
-		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
+		$tab_names = $that->ui->generate_id_from_name( $name_prefix ) . '_settings_tab_';
 		?>
 	<div class="ipt_uif_tabs">
 		<ul>
@@ -682,53 +675,53 @@ class IPT_FSQM_Ext_Elm {
 				<tbody>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[title]', __( 'Title', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[title]', $data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
+						<td><?php $that->ui->text( $name_prefix . '[title]', $element_data['title'], __( 'Enter Primary Label', 'ipt_fsqm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[subtitle]', __( 'Subtitle', 'ipt_fsqm' ) ); ?></th>
-						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
+						<td><?php $that->ui->text( $name_prefix . '[subtitle]', $element_data['subtitle'], __( 'Description Text (Optional)', 'ipt_fsqm' ), 'large' ); ?></td>
 						<td></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][vertical]', __( 'Label Alignment', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'ipt_fsqm' ), __( 'Horizontal', 'ipt_fsqm' ), $data['settings']['vertical'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][vertical]', __( 'Vertical', 'ipt_fsqm' ), __( 'Horizontal', 'ipt_fsqm' ), $element_data['settings']['vertical'], '1' ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'The alignment of the label(question) and options. Making Horizontal will show the label on left, whereas making vertical will show it on top.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][centered]', __( 'Center Content', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $data['settings']['centered'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][centered]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['centered'], '1' ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'If enabled, then labels and elements will be centered. This will force vertical the content.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][hidden_label]', __( 'Hide Label', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $data['settings']['hidden_label'], '1' ); ?>
+							<?php $that->ui->toggle( $name_prefix . '[settings][hidden_label]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $element_data['settings']['hidden_label'], '1' ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'If enabled, then label along with subtitle and description would be hidden on the form. It would be visible only on the summary table and on emails. When using this, place a meaningful text in the placeholder.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][placeholder]', __( 'Placeholder Text', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->text( $name_prefix . '[settings][placeholder]', $data['settings']['placeholder'], __( 'Disabled', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->text( $name_prefix . '[settings][placeholder]', $element_data['settings']['placeholder'], __( 'Disabled', 'ipt_fsqm' ) ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'Text that is shown by default when the field is empty.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][icon]', __( 'Select Icon', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon]', $data['settings']['icon'], __( 'Do not use any icon', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->icon_selector( $name_prefix . '[settings][icon]', $element_data['settings']['icon'], __( 'Do not use any icon', 'ipt_fsqm' ) ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Select the icon you want to appear before the text. Select none to disable.', 'ipt_fsqm' ) ) ?></td>
+						<td><?php $that->ui->help( __( 'Select the icon you want to appear before the text. Select none to disable.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[tooltip]', __( 'Tooltip', 'ipt_fsqm' ) ); ?></th>
 						<td>
-							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $data['tooltip'], __( 'HTML Enabled', 'ipt_fsqm' ) ); ?>
+							<?php $that->ui->textarea( $name_prefix . '[tooltip]', $element_data['tooltip'], __( 'HTML Enabled', 'ipt_fsqm' ) ); ?>
 						</td>
 						<td><?php $that->ui->help( __( 'If you want to show tooltip, then please enter it here. You can write custom HTML too. Leave empty to disable.', 'ipt_fsqm' ) ); ?></td>
 					</tr>
@@ -742,43 +735,36 @@ class IPT_FSQM_Ext_Elm {
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][min]', __( 'Minumum Input', 'fsqm_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->spinner( $name_prefix . '[settings][min]', $element_data['settings']['min'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->spinner( $name_prefix . '[settings][min]', $element_data['settings']['min'], __( 'Enter Min Value', 'fsqm_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter minimum input.', 'fsqm_elm' ) ) ?></td>
+						<td><?php $that->ui->help( __( 'Enter minimum input.', 'fsqm_elm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][max]', __( 'Maximum Input', 'fsqm_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->spinner( $name_prefix . '[settings][max]', $element_data['settings']['max'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->spinner( $name_prefix . '[settings][max]', $element_data['settings']['max'], __( 'Enter Max Value', 'fsqm_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter Maximum input.', 'fsqm_elm' ) ) ?></td>
+						<td><?php $that->ui->help( __( 'Enter Maximum input.', 'fsqm_elm' ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php $that->ui->generate_label( $name_prefix . '[settings][step]', __( 'Input Step', 'fsqm_elm' ) ); ?></th>
 						<td>
-							<?php $that->ui->spinner( $name_prefix . '[settings][step]', $element_data['settings']['step'], __( 'Enter the label', 'fsqm_elm' ), 'large' ); ?>
+							<?php $that->ui->spinner( $name_prefix . '[settings][step]', $element_data['settings']['step'], __( 'Enter Step Value', 'fsqm_elm' ), 'large' ); ?>
 						</td>
-						<td><?php $that->ui->help( __( 'Enter input step.', 'fsqm_elm' ) ) ?></td>
-					</tr>
-					<tr>
-						<th><?php $that->ui->generate_label( $name_prefix . '[settings][readonly]', __( 'Readonly', 'ipt_fsqm' ) ); ?></th>
-						<td>
-							<?php $that->ui->toggle( $name_prefix . '[settings][readonly]', __( 'Yes', 'ipt_fsqm' ), __( 'No', 'ipt_fsqm' ), $data['settings']['readonly'] ); ?>
-						</td>
-						<td><?php $that->ui->help( __( 'If enabled, then the recorded value would not be editable by user. Make sure the validation matches, otherwise it might lead to error.', 'ipt_fsqm' ) ); ?></td>
+						<td><?php $that->ui->help( __( 'Enter input step.', 'fsqm_elm' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div id="<?php echo $tab_names; ?>_validation">
-			<?php $that->build_validation( $name_prefix, $element_structure['validation'], $data['validation'] ); ?>
+			<?php $that->build_validation( $name_prefix, $element_structure['validation'], $element_data['validation'] ); ?>
 		</div>
 		<div id="<?php echo $tab_names; ?>_logic">
-			<?php $that->build_conditional( $name_prefix, $data['conditional'] ); ?>
+			<?php $that->build_conditional( $name_prefix, $element_data['conditional'] ); ?>
 		</div>
 	</div>
 		<?php
-		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $data['description'], '' );
+		$that->ui->textarea_linked_wp_editor( $name_prefix . '[description]', $element_data['description'], '' );
 	}
 
 	/**
@@ -797,11 +783,16 @@ class IPT_FSQM_Ext_Elm {
 	 */
 	public function currency_cb_front( $element_definition, $key, $element_data, $element_structure, $name_prefix, $submission_data, $submission_structure, $that ) {
 		$params = array(
-			$name_prefix . '[value]', $submission_data['value'], '', $element_data['settings']['min'], $element_data['settings']['max'], $element_data['settings']['step'], $element_data['validation']['required']
+			$name_prefix . '[value]', $submission_data['value'], $element_data['settings']['placeholder'], $element_data['settings']['min'], $element_data['settings']['max'], $element_data['settings']['step'], $element_data['validation']['required']
 		);
-		$id = 'ipt_fsqm_form_' . $that->form_id . '_' . $element_structure['m_type'] . '_' . $key;
-		$that->ui->column_head( $id, 'full', true, 'ipt_fsqm_container_radio' );
-		$that->ui->question_container( $name_prefix, '<i class="ipt-icomoon" data-ipt-icomoon="&#x' . dechex( $element_data['settings']['icon'] ) . '"></i> ' . $element_data['title'], $element_data['subtitle'], array( array( $that->ui, 'spinner' ), $params ), $element_data['validation']['required'], false, false, $element_data['description'] );
+		$id = 'ipt_fsqm_form_' . $that->form_id . '_' . $element_structure['m_type'] . '_' . $key . '_wrap';
+		// Get the icon
+		ob_start();
+		$that->ui->print_icon( $element_data['settings']['icon'], false );
+		$icon = ob_get_clean();
+		// Init the column
+		$that->ui->column_head( $id, 'full', true, 'ipt_fsqm_container_currency', $element_data['tooltip'] );
+		$that->ui->question_container( $name_prefix, $icon . $element_data['title'], $element_data['subtitle'], array( array( $that->ui, 'spinner' ), $params ), $element_data['validation']['required'], false, $element_data['settings']['vertical'], $element_data['description'], [], [], $element_data['settings']['hidden_label'], $element_data['settings']['centered'] );
 		$that->ui->column_tail();
 	}
 
