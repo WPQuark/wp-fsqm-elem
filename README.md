@@ -19,6 +19,9 @@
 -->
 # eForm Extended Element BoilerPlate
 
+[![Repo on GitHub](https://img.shields.io/badge/repo-GitHub-3D76C2.svg)](https://github.com/WPQuark/wp-fsqm-elem)
+[![Repo on GitLab](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://wpquark.io/wpq-develop/wp-fsqm-elem)
+
 This boilerplate is provided to show example code for extending eForm to add
 your own elements.
 
